@@ -17,6 +17,7 @@ BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
 Source1:           http://nginx.org/download/nginx-%{version}.tar.gz.asc
+Source2:           https://github.com/bpaquet/ngx_http_enhanced_memcached_module/archive/465b840a7b6afd3c360dc72cc6a661c156aead09.tar.gz
 Source10:          nginx.init
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -151,6 +152,7 @@ Requires:          nginx
 
 %prep
 %setup -q
+%setup -T -D -a 2
 %patch0 -p0
 cp %{SOURCE200} .
 cp %{SOURCE210} .
@@ -212,6 +214,7 @@ export DESTDIR=%{buildroot}
     --with-stream_ssl_module \
     --with-debug \
     --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
+    --add-module=ngx_http_enhanced_memcached_module-master \
     --with-ld-opt="$RPM_LD_FLAGS -Wl,-E" # so the perl module finds its symbols
 
 make %{?_smp_mflags}
